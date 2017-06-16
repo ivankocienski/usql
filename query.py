@@ -25,8 +25,14 @@ class Query:
         self._offset = arg
         return self
 
-    def __str__(self):
+    def q_where(self, where_bit, *args):
+        self._where = where_bit
+        self._where_args = args
+        return self
+
+    def to_sql(self):
         out = ""
+        args = []
 
         if self._select_fields:
             out += "SELECT %s" % ", ".join(self._select_fields)
@@ -36,17 +42,38 @@ class Query:
 
         out += " FROM %s" % ", ".join(self._source_table)
 
+        if self._where:
+            out += " WHERE %s" % self._where
+            args.extend(self._where_args)
+
         if self._offset:
             out += " OFFSET %d" % self._offset
 
         if self._limit:
             out += " LIMIT %d" % self._limit
 
-        return out
+        return (out, args)
 
+
+    def __str__(self):
+        return "<Query>"
 
 #query = Query().q_from("dildo").q_select("*").q_offset(10).q_limit(20)
-query = Query().q_from("dildo").q_count().q_offset(10).q_limit(20)
+_id = 123
+query = Query().\
+    q_from("dildo").\
+    q_count().\
+    q_where("id=?", _id).\
+    q_offset(10).\
+    q_limit(20)
 
-print(query)
+print(query.to_sql())
   
+"""
+
+where id=1
+where id=1 and a.b = c.d
+where id=1 or a.b = c.d
+in
+like
+"""
