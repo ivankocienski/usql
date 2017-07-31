@@ -2,7 +2,7 @@
 from query import Delete
 import unittest
 
-class TestSelect(unittest.TestCase):
+class TestDelete(unittest.TestCase):
     def test_delete(self):
 
         q = Delete().q_from("users") 

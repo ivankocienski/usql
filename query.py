@@ -22,8 +22,38 @@ class _CommonWhere:
 class Insert:
     pass
 
-class Update:
-    pass
+class Update(_CommonWhere):
+    def __init__(self):
+        super().__init__()
+        self._table = None
+        self._set_fields = []
+        self._set_args = []
+
+    # TODO:
+    #  or (rollback, abort, replace, fail, ignore)
+
+    def q_table(self, tab):
+        self._table = tab
+        return self
+    
+    
+    def q_set(self, field, value):
+        self._set_fields.append(field)
+        self._set_args.append(value)
+        return self
+
+    def to_sql(self):
+        args = []
+        out = "UPDATE %s" % self._table
+
+        if len(self._set_fields) > 0:
+            set_s = ", ".join(self._set_fields)
+            out += " SET %s" % set_s
+            args.extend(self._set_args)
+
+        out, args = self._where_parts(out, args)
+        return (out, args)
+
 
 class Delete(_CommonWhere):
     def __init__(self):
