@@ -1,6 +1,23 @@
 
-#class _Common:
-#    pass
+class _CommonWhere:
+    def __init__(self):
+        self._where  = []
+        self._where_args = []
+
+    def q_where(self, where_bit, *args):
+        self._where.append(where_bit)
+        self._where_args.extend(args)
+        return self
+
+    def _where_parts(self, out, args):
+        if self._where:
+            bracketted = [ '(%s)' % s for s in self._where ] 
+            anded      = " AND ".join(bracketted)
+
+            out += " WHERE %s" % anded
+            args.extend(self._where_args)
+
+        return (out, args)
 
 class Insert:
     pass
@@ -8,8 +25,9 @@ class Insert:
 class Update:
     pass
 
-class Delete:
+class Delete(_CommonWhere):
     def __init__(self):
+        super().__init__()
         self._table = None
 
     def q_from(self, tab):
@@ -17,16 +35,19 @@ class Delete:
         return self
 
     def to_sql(self):
-
+        args = [] 
         sql = "DELETE FROM %s" % self._table
 
-        return (sql, [])
+        sql, args = self._where_parts(sql, args)
+
+        return (sql, args)
 
 
 
-class Select:
+class Select(_CommonWhere):
 
     def __init__(self):
+        super().__init__()
         self._select_fields = '*'
         #self._count_mode   = False
         self._source_table = None
@@ -35,8 +56,6 @@ class Select:
         self._limit  = None
         self._offset = None
         self._order  = None
-        self._where  = []
-        self._where_args = []
         self._group = None
         self._group_having = None
         self._group_args = []
@@ -86,10 +105,6 @@ class Select:
         self._order = args
         return self
 
-    def q_where(self, where_bit, *args):
-        self._where.append(where_bit)
-        self._where_args.extend(args)
-        return self
 
     def to_sql(self):
         out = ""
@@ -107,12 +122,8 @@ class Select:
         if self._join:
             out += " JOIN %s ON %s" % (self._join, self._join_on)
 
-        if self._where:
-            bracketted = [ '(%s)' % s for s in self._where ] 
-            anded      = " AND ".join(bracketted)
-
-            out += " WHERE %s" % anded
-            args.extend(self._where_args)
+        # where 
+        out, args = self._where_parts(out, args)
 
         if self._group:
             out += " GROUP BY ?"
