@@ -9,17 +9,26 @@ class Update:
     pass
 
 class Delete:
-    pass
+    def __init__(self):
+        self._table = None
+
+    def q_from(self, tab):
+        self._table = tab
+        return self
+
+    def to_sql(self):
+
+        sql = "DELETE FROM %s" % self._table
+
+        return (sql, [])
 
 
-class Count:
-    pass
 
 class Select:
 
     def __init__(self):
         self._select_fields = '*'
-        self._count_mode   = False
+        #self._count_mode   = False
         self._source_table = None
         #self._distinc = None
         self._join   = None
@@ -131,22 +140,6 @@ class Select:
     def __str__(self):
         return "<Query>"
 
-#query = Query().q_from("dildo").q_select("*").q_offset(10).q_limit(20)
-#_id = 123
-#query = Select().\
-#    one().\
-#    q_from("dildo").\
-#    q_count().\
-#    q_where("id=?", _id).\
-#    q_offset(10)
+class Count(Select):
+    pass
 
-#print(query.to_sql())
-  
-"""
-
-where id=1
-where id=1 and a.b = c.d
-where id=1 or a.b = c.d
-in
-like
-"""
