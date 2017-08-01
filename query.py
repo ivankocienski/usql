@@ -67,7 +67,7 @@ class Update(_CommonWhere):
     
     
     def q_set(self, field, value):
-        self._set_fields.append(field)
+        self._set_fields.append("%s=?" % field)
         self._set_args.append(value)
         return self
 
