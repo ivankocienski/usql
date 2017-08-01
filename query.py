@@ -102,6 +102,23 @@ class Delete(_CommonWhere):
         return (sql, args)
 
 
+class Count(_CommonWhere):
+
+    def __init__(self):
+        super().__init__()
+        self._table = None
+
+    def q_table(self, tab):
+        self._table = tab
+        return self
+
+    def to_sql(self):
+        args = [] 
+        sql = "SELECT COUNT(*) FROM %s" % self._table
+
+        sql, args = self._where_parts(sql, args)
+
+        return (sql, args)
 
 class Select(_CommonWhere):
 
@@ -210,6 +227,6 @@ class Select(_CommonWhere):
     def __str__(self):
         return "<Query>"
 
-class Count(Select):
-    pass
+
+
 
