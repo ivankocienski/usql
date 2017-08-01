@@ -13,7 +13,7 @@ class TestUpdate(unittest.TestCase):
         self.assertEqual(len(args), 0)
 
     def test_set(self):
-        q = Update().q_table("users").q_set("name=?", 'jerry')
+        q = Update().q_table("users").q_set("name", 'jerry')
         sql, args = q.to_sql()
 
         ex_sql = "UPDATE users SET name=?"
@@ -23,8 +23,8 @@ class TestUpdate(unittest.TestCase):
 
     def test_set_multi(self):
         q = Update().q_table("users").\
-                q_set("name=?", 'jerry').\
-                q_set("age=?", 123)
+                q_set("name", 'jerry').\
+                q_set("age", 123)
 
         sql, args = q.to_sql()
 
