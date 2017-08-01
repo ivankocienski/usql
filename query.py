@@ -20,7 +20,36 @@ class _CommonWhere:
         return (out, args)
 
 class Insert:
-    pass
+    def __init__(self):
+        self._table = None
+
+    # TODO:
+    #  or (rollback, abort, replace, fail, ignore)
+
+    def q_table(self, tab):
+        self._table = tab
+        self._columns = []
+        self._values = []
+        return self
+
+    def q_columns(self, *cols):
+        self._columns.extend(cols)
+        return self
+    
+    def q_values(self, *val):
+        self._values.extend(val)
+        return self
+
+    def to_sql(self):
+        args = []
+        out = "INSERT INTO %s" % self._table
+        
+        out += " (%s)" % ", ".join(self._columns)
+        out += " VALUES (%s)" % ", ".join(['?'] * len(self._columns))
+        args.extend(self._values)
+
+
+        return (out, args)
 
 class Update(_CommonWhere):
     def __init__(self):
