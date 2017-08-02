@@ -1,5 +1,5 @@
 
-from query import Select
+from usql.statement import Select
 import unittest
 
 class TestSelect(unittest.TestCase):

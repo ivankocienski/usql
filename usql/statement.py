@@ -125,9 +125,7 @@ class Select(_CommonWhere):
     def __init__(self):
         super().__init__()
         self._select_fields = '*'
-        #self._count_mode   = False
         self._source_table = None
-        #self._distinc = None
         self._join   = None
         self._limit  = None
         self._offset = None
@@ -145,11 +143,6 @@ class Select(_CommonWhere):
         self._select_fields = fields
         return self
 
-    # this can be done as a select fields
-    #def q_distinct(self, arg):
-    #    self._distinct = arg
-    #    return self
-
     def q_from(self, *tables):
         self._source_table = tables
         return self
@@ -164,10 +157,6 @@ class Select(_CommonWhere):
         self._group_having = having
         self._group_args = having_args
         return self
-
-    #def q_count(self):
-    #    self._count_mode = True
-    #    return self
 
     def q_limit(self, arg):
         self._limit = arg
@@ -188,10 +177,6 @@ class Select(_CommonWhere):
 
         if self._select_fields:
             out += "SELECT %s" % ", ".join(self._select_fields)
-
-        #elif self.q_count:
-        #    out += "SELECT COUNT(*)"
-
 
         out += " FROM %s" % ", ".join(self._source_table)
 

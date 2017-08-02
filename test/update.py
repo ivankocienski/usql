@@ -1,4 +1,5 @@
-from query import Update
+
+from usql.statement import Update
 import unittest
 
 class TestUpdate(unittest.TestCase):

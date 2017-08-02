@@ -1,5 +1,5 @@
 
-from query import Insert
+from usql.statement import Insert
 import unittest
 
 class TestInsert(unittest.TestCase):

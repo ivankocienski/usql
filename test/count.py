@@ -1,4 +1,4 @@
-from query import Count
+from usql.statement import Count
 import unittest
 
 class TestCount(unittest.TestCase):

@@ -1,5 +1,5 @@
 
-from query import Delete
+from usql.statement import Delete
 import unittest
 
 class TestDelete(unittest.TestCase):

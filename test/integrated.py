@@ -1,7 +1,7 @@
 import sqlite3
 import unittest
 
-from query import Count, Select, Delete, Update, Insert
+from usql.statement import Count, Select, Delete, Update, Insert
 
 DB_NAME = 'test-database.sqlite3'
 
