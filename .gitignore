@@ -1,2 +1,3 @@
 test-database.sqlite3
 venv/
+usql.egg-info/
